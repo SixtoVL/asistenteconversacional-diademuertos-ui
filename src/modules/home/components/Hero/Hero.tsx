@@ -1,10 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../../components/ui/Button';
 import heroImage from '../../../../assets/diademuertos_image1.jpg';
 import styles from './Hero.module.css';
 
 export function Hero() {
+  const navigate = useNavigate();
+
   const handleStart = (): void => {
-    // TODO: navegar a la vista de chat cuando exista (incremento del chat).
+    void navigate('/chat');
   };
 
   return (

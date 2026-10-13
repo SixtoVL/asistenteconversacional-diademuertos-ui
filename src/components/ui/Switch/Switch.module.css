@@ -1,0 +1,53 @@
+/* src/components/ui/Switch/Switch.module.css */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.track {
+  display: inline-flex;
+  align-items: center;
+  width: 2.75rem;
+  height: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: 0.2rem;
+  flex-shrink: 0;
+  background-color: var(--color-border);
+  transition: background-color 0.2s ease;
+}
+
+.thumb {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease;
+}
+
+.input:checked + .track {
+  background-color: var(--color-marigold);
+}
+
+.input:checked + .track .thumb {
+  transform: translateX(1.25rem);
+}
+
+.input:focus-visible + .track {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.text {
+  font-size: 0.95rem;
+}

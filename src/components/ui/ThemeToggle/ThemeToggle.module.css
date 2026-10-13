@@ -1,0 +1,16 @@
+/* src/components/ui/ThemeToggle/ThemeToggle.module.css */
+.themeToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.themeToggle:hover {
+  border-color: var(--color-primary);
+}

@@ -1,10 +1,13 @@
 import { ThemeProvider } from './context/ThemeContext';
-import { HomeView } from './modules/home/views/HomeView';
+import { ChatSettingsProvider } from './context/ChatSettingsContext';
+import { AppRouter } from './routes/AppRouter';
 
 export function App() {
   return (
     <ThemeProvider>
-      <HomeView />
+      <ChatSettingsProvider>
+        <AppRouter />
+      </ChatSettingsProvider>
     </ThemeProvider>
   );
 }

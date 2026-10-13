@@ -1,0 +1,58 @@
+/* src/modules/chat/views/ChatView.module.css */
+.shell {
+  min-height: 100vh;
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.conversation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.messageList {
+  max-width: 48rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.inputBar {
+  position: sticky;
+  bottom: 0;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  padding: var(--spacing-md) 0 calc(var(--spacing-md) + env(safe-area-inset-bottom, 0px));
+}
+
+.inputInner {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.disclaimer {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.emptyMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

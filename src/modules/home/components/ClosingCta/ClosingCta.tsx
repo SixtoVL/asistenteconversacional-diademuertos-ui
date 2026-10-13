@@ -1,10 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../../components/ui/Button';
 import closingImage from '../../../../assets/diademuertos_image3.jpg';
 import styles from './ClosingCta.module.css';
 
 export function ClosingCta() {
+  const navigate = useNavigate();
+
   const handleStart = (): void => {
-    // TODO: navegar a la vista de chat cuando exista (incremento del chat).
+    void navigate('/chat');
   };
 
   return (
