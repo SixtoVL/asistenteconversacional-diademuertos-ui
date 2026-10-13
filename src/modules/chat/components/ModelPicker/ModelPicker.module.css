@@ -26,6 +26,25 @@
   display: none;
 }
 
+.stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.25;
+}
+
+.caption {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.modelLine {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
 .popover {
   position: absolute;
   top: calc(100% + var(--spacing-sm));
