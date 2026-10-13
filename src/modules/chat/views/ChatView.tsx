@@ -82,7 +82,8 @@ export function ChatView() {
               ? {
                   id: nextId(),
                   role: 'assistant',
-                  text: `${respuesta.titulo}\n\n${respuesta.detalle}\n\n${respuesta.justificacion}`,
+                  text: `${respuesta.titulo}\n\n${respuesta.detalle}`,
+                  fuentes: (respuesta.fuentes ?? []).map((f) => f.titulo),
                 }
               : {
                   id: nextId(),

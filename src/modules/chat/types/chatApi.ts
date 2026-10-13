@@ -22,6 +22,7 @@ export const chatResponseSchema = z.discriminatedUnion('type', [
     titulo: z.string(),
     detalle: z.string(),
     justificacion: z.string(),
+    fuentes: z.array(fuenteRefSchema).optional(),
   }),
   z.object({
     type: z.literal('error'),
