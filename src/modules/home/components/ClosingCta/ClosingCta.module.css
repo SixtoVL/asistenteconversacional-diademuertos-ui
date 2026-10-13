@@ -1,0 +1,60 @@
+/* src/modules/home/components/ClosingCta/ClosingCta.module.css */
+.section {
+  padding: var(--spacing-2xl) 0;
+  scroll-margin-top: 4.5rem;
+}
+
+.sectionInner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.figure {
+  min-height: 16rem;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+  align-items: flex-start;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
+}
+
+.text {
+  color: var(--color-text-muted);
+}
+
+.ctaRow {
+  margin-top: var(--spacing-sm);
+}
+
+@media (max-width: 48rem) {
+  .banner {
+    grid-template-columns: 1fr;
+  }
+}

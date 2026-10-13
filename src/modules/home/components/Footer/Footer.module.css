@@ -1,0 +1,25 @@
+/* src/modules/home/components/Footer/Footer.module.css */
+.footer {
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+}
+
+.inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  text-align: center;
+}
+
+.brand {
+  font-weight: 700;
+}
+
+.note,
+.copy {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}

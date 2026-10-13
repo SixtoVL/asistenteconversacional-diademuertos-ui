@@ -1,0 +1,20 @@
+/* src/styles/main.css */
+@import './_variables.css';
+@import './reset.css';
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
