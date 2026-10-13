@@ -1,0 +1,58 @@
+/* src/modules/chat/components/Escribiendo/Escribiendo.module.css */
+.fila {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: linear-gradient(
+    135deg,
+    var(--color-marigold),
+    var(--color-rose) 60%,
+    var(--color-primary)
+  );
+}
+
+.burbuja {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: var(--spacing-md) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border-bottom-left-radius: var(--spacing-xs);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.punto {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--color-text-muted);
+  animation: escribiendoPulso 1.2s ease-in-out infinite;
+}
+
+.punto:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.punto:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes escribiendoPulso {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-0.2rem);
+  }
+}

@@ -1,39 +1,36 @@
 import { useEffect, useRef, useState } from 'react';
+import { useChatSettings } from '../../../context/ChatSettingsContext';
 import { ChatHeader } from '../components/ChatHeader/ChatHeader';
 import { Sidebar } from '../components/Sidebar/Sidebar';
 import { MessageBubble } from '../components/MessageBubble/MessageBubble';
 import { Composer } from '../components/Composer/Composer';
 import { EmptyState } from '../components/EmptyState/EmptyState';
+import { OpcionesMensaje } from '../components/OpcionesMensaje/OpcionesMensaje';
+import { Escribiendo } from '../components/Escribiendo/Escribiendo';
+import { FuentesRespuesta } from '../components/FuentesRespuesta/FuentesRespuesta';
 import type { ChatMessage } from '../types/chat';
+import { enviarMensaje } from '../services/chatService';
 import styles from './ChatView.module.css';
 
-const MOCK_MESSAGES: ChatMessage[] = [
-  {
-    id: 'm1',
-    role: 'assistant',
-    text: '¡Hola! Soy tu asistente del Día de Muertos. Puedo contarte sobre la historia, las tradiciones y el significado de las ofrendas. ¿Por dónde empezamos?',
-  },
-  {
-    id: 'm2',
-    role: 'user',
-    text: '¿Qué significa la flor de cempasúchil en la ofrenda?',
-  },
-  {
-    id: 'm3',
-    role: 'assistant',
-    text: 'La flor de cempasúchil es uno de los símbolos más representativos de la ofrenda. Su color naranja intenso y su aroma sirven para guiar a las almas en su camino de regreso el 1 y 2 de noviembre. Con sus pétalos se trazan caminos desde la entrada hasta el altar.',
-  },
-];
+function nextId(): string {
+  return `m-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+const AVISO_LLM =
+  'El modo con modelo de lenguaje todavía no está conectado (fase 2). ' +
+  'Cambia a modo experto para conversar con la base de conocimientos verificada.';
 
 export function ChatView() {
-  const [messages, setMessages] = useState<ChatMessage[]>(MOCK_MESSAGES);
+  const settings = useChatSettings();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ block: 'end' });
-  }, [messages]);
+  }, [messages, isLoading]);
 
   const handleNewChat = (): void => {
     setMessages([]);
@@ -41,8 +38,78 @@ export function ChatView() {
     setSidebarOpen(false);
   };
 
+  const handleEnviar = async (texto: string): Promise<void> => {
+    const limpio = texto.trim();
+    if (limpio.length === 0 || isLoading) {
+      return;
+    }
+    const userMessage: ChatMessage = { id: nextId(), role: 'user', text: limpio };
+    const historial = [...messages, userMessage];
+    setMessages(historial);
+    setDraft('');
+
+    if (settings.mode === 'llm') {
+      setMessages([
+        ...historial,
+        { id: nextId(), role: 'assistant', text: AVISO_LLM },
+      ]);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const respuesta = await enviarMensaje(historial, {
+        mode: settings.mode,
+        providerId: settings.providerId,
+        modelId: settings.modelId,
+      });
+      const assistantMessage: ChatMessage =
+        respuesta.type === 'texto'
+          ? {
+              id: nextId(),
+              role: 'assistant',
+              text: respuesta.texto,
+              fuentes: (respuesta.fuentes ?? []).map((f) => f.titulo),
+            }
+          : respuesta.type === 'pregunta_guiada'
+            ? {
+                id: nextId(),
+                role: 'assistant',
+                text: respuesta.texto,
+                opciones: respuesta.opciones,
+              }
+            : respuesta.type === 'resultado_se'
+              ? {
+                  id: nextId(),
+                  role: 'assistant',
+                  text: `${respuesta.titulo}\n\n${respuesta.detalle}\n\n${respuesta.justificacion}`,
+                }
+              : {
+                  id: nextId(),
+                  role: 'assistant',
+                  text: `Error (${respuesta.codigo}): ${respuesta.mensaje}`,
+                };
+      setMessages([...historial, assistantMessage]);
+    } catch {
+      setMessages([
+        ...historial,
+        {
+          id: nextId(),
+          role: 'assistant',
+          text: 'No se pudo conectar con el servidor. Verifica que el backend esté en marcha e inténtalo de nuevo.',
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = (): void => {
-    // TODO: enviar el mensaje y actualizar la conversación (siguiente incremento).
+    void handleEnviar(draft);
+  };
+
+  const handleElegir = (etiqueta: string): void => {
+    void handleEnviar(etiqueta);
   };
 
   const hasConversation = messages.length > 0;
@@ -65,15 +132,40 @@ export function ChatView() {
                 aria-label="Conversación"
                 aria-live="polite"
               >
-                {messages.map((message) => (
-                  <MessageBubble key={message.id} role={message.role} text={message.text} />
-                ))}
+                {messages.map((message, index) => {
+                  const esUltimo = index === messages.length - 1;
+                  if (message.role === 'assistant' && message.opciones) {
+                    return (
+                      <OpcionesMensaje
+                        key={message.id}
+                        texto={message.text}
+                        opciones={message.opciones}
+                        onElegir={handleElegir}
+                        deshabilitado={isLoading || !esUltimo}
+                      />
+                    );
+                  }
+                  return (
+                    <div key={message.id}>
+                      <MessageBubble role={message.role} text={message.text} />
+                      {message.role === 'assistant' && message.fuentes && (
+                        <FuentesRespuesta fuentes={message.fuentes} />
+                      )}
+                    </div>
+                  );
+                })}
+                {isLoading && <Escribiendo />}
                 <div ref={bottomRef} />
               </div>
             </main>
             <div className={styles.inputBar}>
               <div className={styles.inputInner}>
-                <Composer value={draft} onChange={setDraft} onSubmit={handleSubmit} />
+                <Composer
+                  value={draft}
+                  onChange={setDraft}
+                  onSubmit={handleSubmit}
+                  isLoading={isLoading}
+                />
                 <p className={styles.disclaimer}>
                   El asistente puede cometer errores. El conocimiento proviene de fuentes
                   culturales verificadas.
@@ -83,7 +175,7 @@ export function ChatView() {
           </>
         ) : (
           <main className={styles.emptyMain}>
-            <EmptyState />
+            <EmptyState onEnviar={handleEnviar} />
           </main>
         )}
       </div>

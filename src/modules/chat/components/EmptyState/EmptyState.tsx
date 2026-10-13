@@ -10,11 +10,19 @@ const SUGGESTIONS = [
   '¿Qué elementos no pueden faltar en la ofrenda?',
 ];
 
-export function EmptyState() {
+export interface EmptyStateProps {
+  onEnviar: (texto: string) => void;
+}
+
+export function EmptyState({ onEnviar }: EmptyStateProps) {
   const [draft, setDraft] = useState('');
 
   const handleSubmit = (): void => {
-    // TODO: enviar el mensaje e iniciar la conversación (siguiente incremento).
+    const limpio = draft.trim();
+    if (limpio.length === 0) {
+      return;
+    }
+    onEnviar(limpio);
   };
 
   return (

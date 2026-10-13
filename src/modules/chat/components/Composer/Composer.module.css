@@ -53,3 +53,18 @@
   cursor: not-allowed;
   opacity: 0.4;
 }
+
+.spinner {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 248, 240, 0.4);
+  border-top-color: #fff8f0;
+  animation: composerSpin 0.8s linear infinite;
+}
+
+@keyframes composerSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

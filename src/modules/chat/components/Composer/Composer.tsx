@@ -6,9 +6,16 @@ export interface ComposerProps {
   onChange: (value: string) => void;
   onSubmit: () => void;
   autoFocus?: boolean;
+  isLoading?: boolean;
 }
 
-export function Composer({ value, onChange, onSubmit, autoFocus = false }: ComposerProps) {
+export function Composer({
+  value,
+  onChange,
+  onSubmit,
+  autoFocus = false,
+  isLoading = false,
+}: ComposerProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     onSubmit();
@@ -26,16 +33,20 @@ export function Composer({ value, onChange, onSubmit, autoFocus = false }: Compo
         autoComplete="off"
         maxLength={2000}
         autoFocus={autoFocus}
+        disabled={isLoading}
         className={styles.field}
       />
       <button
         type="submit"
         className={styles.sendButton}
-        aria-label="Enviar mensaje"
+        aria-label={isLoading ? 'Enviando mensaje' : 'Enviar mensaje'}
         title="Enviar"
-        disabled={value.trim().length === 0}
+        disabled={value.trim().length === 0 || isLoading}
       >
-        <svg
+        {isLoading ? (
+          <span className={styles.spinner} aria-hidden="true" />
+        ) : (
+          <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -50,6 +61,7 @@ export function Composer({ value, onChange, onSubmit, autoFocus = false }: Compo
           <line x1="22" y1="2" x2="11" y2="13" />
           <polygon points="22 2 15 22 11 13 2 9 22 2" />
         </svg>
+        )}
       </button>
     </form>
   );

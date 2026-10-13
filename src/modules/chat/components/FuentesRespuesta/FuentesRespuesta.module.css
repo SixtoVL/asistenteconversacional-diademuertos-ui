@@ -1,0 +1,36 @@
+/* src/modules/chat/components/FuentesRespuesta/FuentesRespuesta.module.css */
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  align-items: flex-start;
+}
+
+.boton {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.boton:hover {
+  color: var(--color-text);
+}
+
+.lista {
+  list-style: disc;
+  margin: 0;
+  padding-left: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
